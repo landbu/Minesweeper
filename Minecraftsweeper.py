@@ -32,9 +32,7 @@ def map_creator(width, height):
             x += 1
         y += 1
         x = 0
-
-map_creator(5, 5)
-
+        
 
 def main():
     print("Welcome to main!")
