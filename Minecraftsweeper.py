@@ -9,7 +9,7 @@ map_list = []
 
 
 class Tile:
-    def __init__(self, lava_bool: bool, x_cord, y_cord, nearby_lava, coverd_bool: bool, nears, state, button):
+    def __init__(self, lava_bool: bool, x_cord, y_cord, nearby_lava, coverd_bool: bool, nears, state, button, prime_nears):
         self.lava_bool = lava_bool
         self.x_cord = x_cord
         self.y_cord = y_cord
@@ -18,6 +18,7 @@ class Tile:
         self.nears = nears
         self.state = state
         self.button = button
+        self.prime_nears = prime_nears
 
 
     def get_lava_bool(self):
@@ -47,10 +48,12 @@ class Tile:
     def set_button(self, button):
         self.button = button
 
+    def set_prime_nears(self, prime_nears):
+        self.prime_nears = self.prime_nears
+
     def clicked(self):
         self.coverd_bool = False
         clicked(self) # Detta ser väldigt underligt ut, jag vet, men det sätt jag ville använda fungerade inte, detta löste problemet
-
 
 
 def map_creator(width, height):
@@ -86,7 +89,7 @@ def map_creator(width, height):
             else:
                 state = "normal"
 
-            row_list.append(Tile(lava_bool, x, y, "uncalculated", True, "uncalculated", state, "uncalculated"))
+            row_list.append(Tile(lava_bool, x, y, "uncalculated", True, "uncalculated", state, "uncalculated", "uncalculated"))
             x += 1
         map.append(row_list)
         y += 1
@@ -123,6 +126,28 @@ def calculate_nears():
         y_index +=1
 
 
+def calculate_prime_nears():
+    for tile in map:
+        if tile.get_nearby_lava() == 0:
+            state = tile.get_state()
+            if state == "top_left":
+                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[1]])
+            elif state == "top":
+                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[1]], tile.get_nears()[3])
+            elif state == "top_right":
+                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[2]])
+            elif state == "left":
+                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[2], tile.get_nears()[3]])
+            elif state == "normal":
+                tile.set_prime_nears([tile.get_nears()[1], tile.get_nears()[3], tile.get_nears()[4], tile.get_nears()[6]])
+            elif state == "right":
+                tile.set_prime_nears([tile.get_nears()[1], tile.get_nears()[2], tile.get_nears()[0], tile.get_nears()[4]])
+            elif state == "bot_left":
+                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[2]])
+            elif state == "bot_right":
+                tile.set_prime_nears([tile.get_nears()[1], tile.get_nears()[2]])
+
+
 def calculate_nearby_lava():
     # Räknar ut hur mycket lava som ligger nära med hjälp av nears atributet som räknas ut i calculate_nears()
     for row in map:
@@ -135,6 +160,8 @@ def calculate_nearby_lava():
 
 
 def big_clear(original_tile):
+    #funktionen ansvarar för att göra de stora clearsen
+
     big_clear_list = [] # Lista sammankoppalade tiles utan nrliggandelava
     latest_list = []
     big_display_list = [] # Lista av alla tiles som ska synas efter processen är klar som har närliggande lava
@@ -145,20 +172,26 @@ def big_clear(original_tile):
             latest_list.append(near)
         else:
             big_display_list.append(near)
+
     while True:
-        if len(latest_list) == 0:
+        if len(latest_list) == 0: #Om det inte finns något mer all cleara, avbryt loopen
             break
-        for tile in latest_list:
-            latest_list = []
-            for near in tile:
-                if near.get_nearby_lava() == 0:
+        temp_list = latest_list
+        latest_list = []
+        for tile in temp_list:
+            for near in tile.get_nears():
+                if near.get_nearby_lava() == 0 and near not in big_clear_list:
                     big_clear_list.append(near)
                     latest_list.append(near)
-                else:
+                elif near not in big_clear_list:
                     big_display_list.append(near)
 
+
     for tile in big_clear_list:
-        # tile.set_button(bla bla) # Här var du senast
+        tile.set_button(Label(root, text="0"))
+    for tile in big_display_list:
+        tile.set_button(Label(root, text=tile.get_nearby_lava()))
+    play(len(map[0]))
 
 
 def clicked(tile):
@@ -178,7 +211,6 @@ def map_render(width):
         for tile in row:
             map_list.append(tile)
     for tile in map_list:
-        #button = Button(root, width=5, height=2, command=lambda: clicked(tile))
         button = Button(root, width=5, height=2, command=tile.clicked)
         tile.set_button(button)
 
@@ -194,27 +226,6 @@ def play(width):
             x = 0
 
 
-def basic_print(var):
-    if var == "pos":
-        for row in map:
-            for obj in row:
-                print(obj.get_position(), end="")
-            print("")
-
-    elif var == "state":
-        for row in map:
-            for obj in row:
-                print(obj.get_state(), end=", ")
-            print("")
-
-    elif var == "lava":
-        for row in map:
-            for obj in row:
-                if obj.get_lava_bool(): print("1", end=", ")
-                else: print("0", end=", ")
-            print("")
-
-
 def main():
     print("Welcome to main!")
     width = int(input("Width of map: "))
@@ -222,6 +233,7 @@ def main():
     map_creator(width, height)
     calculate_nears()
     calculate_nearby_lava()
+    #calculate_prime_nears() jag tror faktiskt inte säker om detta behövs
     map_render(width)
     play(width)
 
