@@ -1,6 +1,6 @@
 import random
 from tkinter import *
-
+from tkinter import messagebox
 
 root = Tk()
 root.title("Mine Sweeper")
@@ -191,7 +191,20 @@ def big_clear(original_tile):
         tile.set_button(Label(root, text="0"))
     for tile in big_display_list:
         tile.set_button(Label(root, text=tile.get_nearby_lava()))
-    play(len(map[0]))
+    play()
+
+
+def game_over():
+    for row in map:
+        for tile in row:
+            if tile.get_lava_bool():
+                tile.set_button(Label(root, text="B"))
+            else:
+                tile.set_button(Label(root, text=tile.get_nearby_lava())) # fixa sedan så man kan se vilka man lyckades få och inte
+    messagebox.showerror("Game Over", "You lost :(\n Click ok to display the uncoverd map")
+
+
+
 
 
 def clicked(tile):
@@ -199,11 +212,12 @@ def clicked(tile):
     Definerar vad som händer när en knapp blir tryckt
     """
     if tile.get_lava_bool():
-        tile.set_button(Label(root, text="B"))
+        game_over()
+        tile.set_button(Label(root, text="B", bg="red"))
     else:
         if tile.get_nearby_lava() != 0: tile.set_button(Label(root, text=tile.get_nearby_lava())) #displayar antal närliggande lava
         else: big_clear(tile)
-    play(len(map[0]))
+    play()
 
 
 def map_render(width):
@@ -215,13 +229,14 @@ def map_render(width):
         tile.set_button(button)
 
 
-def play(width):
+def play():
+
     x = 0
     y = 0
     for tile in map_list:
         tile.get_button().grid(row=y, column=x)
         x += 1
-        if x >= width:
+        if x >= len(map[0]):
             y += 1
             x = 0
 
@@ -233,9 +248,9 @@ def main():
     map_creator(width, height)
     calculate_nears()
     calculate_nearby_lava()
-    #calculate_prime_nears() jag tror faktiskt inte säker om detta behövs
+    #calculate_prime_nears() jag tror faktiskt inte detta behövs
     map_render(width)
-    play(width)
+    play()
 
     root.mainloop()
 
