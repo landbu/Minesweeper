@@ -1,6 +1,7 @@
 import random
 from tkinter import *
 from tkinter import messagebox
+import time
 
 root = Tk()
 root.title("Start menu")
@@ -203,7 +204,14 @@ def big_clear(original_tile):
     play()
 
 
-def game_over():
+def reset_window():
+    global root
+    root.destroy()  # Följande 3 lines är till för att reseta root fönstret
+    root = Tk()
+    root.title("Mine Sweeper")
+
+
+def game_over(mined_lava):
     for row in map:
         for tile in row:
             if tile.get_lava_bool():
@@ -211,7 +219,14 @@ def game_over():
             else:
                 tile.set_button(
                     Label(root, text=tile.get_nearby_lava()))  # fixa sedan så man kan se vilka man lyckades få och inte
+    mined_lava.set_button(Label(root, text="B", bg="red"))
     messagebox.showerror("Game Over", "You lost :(\n Click ok to display the uncoverd map")
+    play()
+    answer = messagebox.askyesno("Restart?", "Would you like to play again?")
+    if answer == 1:
+        reset_window()
+        menu()
+    else: pass
 
 
 def clicked(tile):
@@ -219,14 +234,14 @@ def clicked(tile):
     Definerar vad som händer när en knapp blir tryckt
     """
     if tile.get_lava_bool():
-        game_over()
-        tile.set_button(Label(root, text="B", bg="red"))
+        game_over(tile)
+
     else:
         if tile.get_nearby_lava() != 0:
             tile.set_button(Label(root, text=tile.get_nearby_lava()))  # displayar antal närliggande lava
         else:
             big_clear(tile)
-    play()
+        play()
 
 
 def map_render(width):
@@ -254,15 +269,16 @@ def menu_confirm(width, height):
         width = int(width)
         height = int(height)
         if 34 > width > 1 and 21 > height > 1:  # Säkerställer användaren skriver in rimliga nummer
-            global root
-            root.destroy()  # Följande 3 lines är till för att reseta root fönstret
-            root = Tk()
-            root.title("Mine Sweeper")
+            reset_window()
+            #global root
+            #root.destroy()  # Följande 3 lines är till för att reseta root fönstret
+            #root = Tk()
+            #root.title("Mine Sweeper")
             main(width, height)
         elif width > 33:
-            messagebox.showerror("Error", "The (1) witdh you have enterd is\ntoo big, use a witdh smaller than 34")
+            messagebox.showerror("Error", "The (1st) witdh you have enterd is\ntoo big, use a witdh smaller than 34")
         elif height > 20:
-            messagebox.showerror("Error", "The (2) height you have enterd is\ntoo big, use a height smaller than 21")
+            messagebox.showerror("Error", "The (2nd) height you have enterd is\ntoo big, use a height smaller than 21")
         elif width < 2 or height < 2:
             messagebox.showerror("Error", "The minimum map size is 2X2\nenter bigger numbers")
         else:
