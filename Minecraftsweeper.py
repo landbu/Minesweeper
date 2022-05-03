@@ -226,7 +226,7 @@ def game_over(mined_lava):
     if answer == 1:
         reset_window()
         menu()
-    else: pass
+    else: root.destroy()
 
 
 def clicked(tile):
