@@ -8,8 +8,7 @@ root.title("Start menu")
 
 
 class Tile:
-    def __init__(self, lava_bool: bool, x_cord, y_cord, nearby_lava, coverd_bool: bool, nears, state, button,
-                 prime_nears):
+    def __init__(self, lava_bool: bool, x_cord, y_cord, nearby_lava, coverd_bool: bool, nears, state, button):
         self.lava_bool = lava_bool
         self.x_cord = x_cord
         self.y_cord = y_cord
@@ -18,7 +17,6 @@ class Tile:
         self.nears = nears
         self.state = state
         self.button = button
-        self.prime_nears = prime_nears
 
     def get_lava_bool(self):
         return self.lava_bool
@@ -47,23 +45,22 @@ class Tile:
     def set_button(self, button):
         self.button = button
 
-    def set_prime_nears(self, prime_nears):
-        self.prime_nears = self.prime_nears
-
     def clicked(self):
         self.coverd_bool = False
-        clicked(
-            self)  # Detta ser väldigt underligt ut, jag vet, men det sätt jag ville använda fungerade inte, detta löste problemet
+        clicked(self)  # Detta ser väldigt underligt ut, jag vet, men det sätt jag ville använda fungerade inte, detta löste problemet
 
 
-def map_creator(width, height):
+def map_creator(width, height, lava_count):
     x = 0
     y = 0
+    lava_list = []
+    for i in range(lava_count): lava_list.append(True)
+    for i in range(width*height-lava_count): lava_list.append(False)
+    random.shuffle(lava_list)
     for row in range(height):
         row_list = []
         for column in range(width):
-            lava_bool = random.choice([True, False, False, False, False])  # Justera sannolikheten senare
-
+            lava_bool = lava_list[width*y+x]
             if row == 0:
                 if column == 0:
                     state = "top_left"
@@ -90,7 +87,7 @@ def map_creator(width, height):
                 state = "normal"
 
             row_list.append(
-                Tile(lava_bool, x, y, "uncalculated", True, "uncalculated", state, "uncalculated", "uncalculated"))
+                Tile(lava_bool, x, y, "uncalculated", True, "uncalculated", state, "uncalculated"))
             x += 1
         map.append(row_list)
         y += 1
@@ -133,30 +130,6 @@ def calculate_nears():
         y_index += 1
 
 
-def calculate_prime_nears():
-    for tile in map:
-        if tile.get_nearby_lava() == 0:
-            state = tile.get_state()
-            if state == "top_left":
-                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[1]])
-            elif state == "top":
-                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[1]], tile.get_nears()[3])
-            elif state == "top_right":
-                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[2]])
-            elif state == "left":
-                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[2], tile.get_nears()[3]])
-            elif state == "normal":
-                tile.set_prime_nears(
-                    [tile.get_nears()[1], tile.get_nears()[3], tile.get_nears()[4], tile.get_nears()[6]])
-            elif state == "right":
-                tile.set_prime_nears(
-                    [tile.get_nears()[1], tile.get_nears()[2], tile.get_nears()[0], tile.get_nears()[4]])
-            elif state == "bot_left":
-                tile.set_prime_nears([tile.get_nears()[0], tile.get_nears()[2]])
-            elif state == "bot_right":
-                tile.set_prime_nears([tile.get_nears()[1], tile.get_nears()[2]])
-
-
 def calculate_nearby_lava():
     # Räknar ut hur mycket lava som ligger nära med hjälp av nears atributet som räknas ut i calculate_nears()
     for row in map:
@@ -170,7 +143,6 @@ def calculate_nearby_lava():
 
 def big_clear(original_tile):
     # funktionen ansvarar för att göra de stora clearsen
-
     big_clear_list = []  # Lista sammankoppalade tiles utan nrliggandelava
     latest_list = []
     big_display_list = []  # Lista av alla tiles som ska synas efter processen är klar som har närliggande lava
@@ -238,6 +210,7 @@ def clicked(tile):
         if tile.get_nearby_lava() != 0:
             tile.set_button(Label(root, text=tile.get_nearby_lava()))  # displayar antal närliggande lava
         else:
+            tile.set_button(Label(root, text="0"))
             big_clear(tile)
         play()
 
@@ -245,66 +218,61 @@ def clicked(tile):
 def map_render(width):
     for row in map:
         for tile in row:
-            map_list.append(tile)
-    for tile in map_list:
-        button = Button(root, width=5, height=2, command=tile.clicked)
-        tile.set_button(button)
+            button = Button(root, width=5, height=2, command=tile.clicked)
+            tile.set_button(button)
 
 
 def play():
     x = 0
     y = 0
-    for tile in map_list:
-        tile.get_button().grid(row=y, column=x)
-        x += 1
-        if x >= len(map[0]):
-            y += 1
-            x = 0
+    for row in map:
+        for tile in row:
+            tile.get_button().grid(row=y, column=x)
+            x += 1
+            if x >= len(map[0]):
+                y += 1
+                x = 0
 
 
-def menu_confirm(width, height):
-    try:
-        width = int(width)
-        height = int(height)
-        if 34 > width > 1 and 21 > height > 1:  # Säkerställer användaren skriver in rimliga nummer
-            reset_window()
+def menu_confirm(width, height, lava_count):
+    #try:
+    width = int(width)
+    height = int(height)
+    lava_count = int(lava_count)
+    if 34 > width > 1 and 21 > height > 1 and 0 != lava_count < height*width:  # Säkerställer användaren skriver in rimliga nummer
+        reset_window()
+        main(width, height, lava_count)
+    elif width > 33: messagebox.showerror("Error", "The (1st) witdh you have enterd is\ntoo big, use a witdh smaller than 34")
+    elif height > 20: messagebox.showerror("Error", "The (2nd) height you have enterd is\ntoo big, use a height smaller than 21")
+    elif width < 2 or height < 2: messagebox.showerror("Error", "The minimum map size is 2X2\nenter bigger numbers")
+    else: messagebox.showerror("Error", "Unecpected error")
 
-            main(width, height)
-        elif width > 33:
-            messagebox.showerror("Error", "The (1st) witdh you have enterd is\ntoo big, use a witdh smaller than 34")
-        elif height > 20:
-            messagebox.showerror("Error", "The (2nd) height you have enterd is\ntoo big, use a height smaller than 21")
-        elif width < 2 or height < 2:
-            messagebox.showerror("Error", "The minimum map size is 2X2\nenter bigger numbers")
-        else:
-            messagebox.showerror("Error", "Unecpected error")
-
-    except: messagebox.showerror("Error", "Please enter intergers")
+#except: messagebox.showerror("Error", "Please enter intergers")
 
 
 def menu():
-    global map_list
     global map
-    map_list = []
     map = []
-    confirm_button = Button(root, text="confirm", command=lambda: menu_confirm(width_input.get(), height_input.get()))
-    width_input = Entry(root, text="test")
+    confirm_button = Button(root, text="confirm", command=lambda: menu_confirm(width_input.get(), height_input.get(), lava_input.get()))
+    width_input = Entry(root)
     height_input = Entry(root)
+    lava_input = Entry(root)
     welcome_box = Label(root, text="Welcome!", font=("Arial", 25))
-    welcome_text = Label(root, text="Please enter the 1. witdh and \n2. height of your desired map")
+    welcome_text = Label(root, text="Please enter the 1. witdh, 2. height of your\n desired map and you desiered amount of lava/bombs (difficulty)")
 
     welcome_text.grid(row=0, column=1)
     welcome_box.grid(row=0, column=0)
     width_input.grid(row=1, column=0)
     height_input.grid(row=1, column=1)
-    confirm_button.grid(row=1, column=2)
+    lava_input.grid(row=1, column=2)
+    confirm_button.grid(row=1, column=3)
 
 
-def main(width, height):
-    map_creator(width, height)
+
+def main(width, height, lava_count):
+    map_creator(width, height, lava_count)
     calculate_nears()
     calculate_nearby_lava()
-    # calculate_prime_nears() jag tror faktiskt inte detta behövs
     map_render(width)
     play()
 
@@ -312,3 +280,6 @@ def main(width, height):
 if __name__ == "__main__":
     menu()
     root.mainloop()
+
+#Fixa en win condition
+#Fixa fixa så man kan välja hur mycket lava man vill ha
