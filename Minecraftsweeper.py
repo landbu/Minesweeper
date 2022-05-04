@@ -5,8 +5,6 @@ import time
 
 root = Tk()
 root.title("Start menu")
-map = []
-map_list = []
 
 
 class Tile:
@@ -270,10 +268,7 @@ def menu_confirm(width, height):
         height = int(height)
         if 34 > width > 1 and 21 > height > 1:  # Säkerställer användaren skriver in rimliga nummer
             reset_window()
-            #global root
-            #root.destroy()  # Följande 3 lines är till för att reseta root fönstret
-            #root = Tk()
-            #root.title("Mine Sweeper")
+
             main(width, height)
         elif width > 33:
             messagebox.showerror("Error", "The (1st) witdh you have enterd is\ntoo big, use a witdh smaller than 34")
@@ -284,11 +279,14 @@ def menu_confirm(width, height):
         else:
             messagebox.showerror("Error", "Unecpected error")
 
-    except:
-        messagebox.showerror("Error", "Please enter intergers")
+    except: messagebox.showerror("Error", "Please enter intergers")
 
 
 def menu():
+    global map_list
+    global map
+    map_list = []
+    map = []
     confirm_button = Button(root, text="confirm", command=lambda: menu_confirm(width_input.get(), height_input.get()))
     width_input = Entry(root, text="test")
     height_input = Entry(root)
