@@ -108,7 +108,7 @@ image.png
 - Added proper docstrings
 - Cleaned up the code further
 
-## Att bidra (Contribution)
+## Contribute
 
 ### When to help
 Currently no changes/help is premitted, the project is not yet graded. 
@@ -124,7 +124,6 @@ Do a pull request and add and dm me on disc or just mail me
 
 ## Contact
 
-***Skriv här hur du blir kontaktad ifall det finns frågor om projektet***
 
 Adam Landbü - Discord: Boofen#8389 - Mail: adam.landbu@gmail.com
 
