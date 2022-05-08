@@ -131,8 +131,6 @@ Link to project: https://github.com/landbu/Minesweeper
 
 ## Acknowledgments
 
-***Här kan du lista resurser eller personer som har hjälpt dig med projektet. Det kan vara länkar till tutorials eller dokumentation, eller bara någon annans profil som du vill uppmärksamma. Har du inget som behöver tas här så kan du strunta i rubriken. ***
-
-- Nicklas Lund
 - [This guy](https://www.youtube.com/watch?v=YXPyB4XeYLA&t=9024s)
 - [Stack-Overflow](https://stackoverflow.com/)
+- Nicklas Lund
