@@ -32,7 +32,8 @@ By starting the program the user will be presented with a menu. In the menu the 
 
 ## Example (exempelkörning)
 
-image.png
+![Mine-screenshot](https://user-images.githubusercontent.com/95740885/167784334-985e68b5-76bf-4f50-8bf0-761afcf702ba.JPG)
+
 
 ## To do/Roadmap
 
