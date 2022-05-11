@@ -58,7 +58,7 @@ class Tile:
         """
         self.coverd_bool = False
         clicked(
-            self)  # Detta ser väldigt underligt ut, jag vet, men det sätt jag ville använda fungerade inte, detta löste problemet
+            self) 
 
 
 def map_creator(width, height, lava_count):
@@ -172,9 +172,9 @@ def big_clear(original_tile):
         original_tile (Tile): An object accisiated with the recently clicked button
     """
 
-    big_clear_list = []  # Lista sammankoppalade tiles utan närliggande lava
+    big_clear_list = []
     latest_list = []
-    big_display_list = []  # Lista av alla tiles som ska synas efter processen är klar som har närliggande lava
+    big_display_list = []
 
     for near in original_tile.get_nears():
         if near.get_nearby_lava() == 0:
@@ -184,7 +184,7 @@ def big_clear(original_tile):
             big_display_list.append(near)
 
     while True:
-        if len(latest_list) == 0:  # Om det inte finns något mer all cleara, avbryt loopen
+        if len(latest_list) == 0:
             break
         temp_list = latest_list
         latest_list = []
@@ -210,7 +210,7 @@ def reset_window():
     """Clears the window by destroying it then and re-creating it
     """
     global root
-    root.destroy()  # Följande 3 lines är till för att reseta root fönstret
+    root.destroy()
     root = Tk()
     root.title("Mine Sweeper")
 
@@ -227,7 +227,7 @@ def game_over(mined_lava):
                 tile.set_button(Label(root, text="B"))
             else:
                 tile.set_button(
-                    Label(root, text=tile.get_nearby_lava()))  # fixa sedan så man kan se vilka man lyckades få och inte
+                    Label(root, text=tile.get_nearby_lava()))
     mined_lava.set_button(Label(root, text="B", bg="red"))
     messagebox.showerror("Game Over", "You lost :(\n Click ok to display the uncoverd map")
     play()
@@ -250,7 +250,7 @@ def clicked(tile):
 
     else:
         if tile.get_nearby_lava() != 0:
-            tile.set_button(Label(root, text=tile.get_nearby_lava()))  # displayar antal närliggande lava
+            tile.set_button(Label(root, text=tile.get_nearby_lava()))
         else:
             tile.set_button(Label(root, text="0"))
             big_clear(tile)
@@ -314,7 +314,7 @@ def menu_confirm(width, height, lava_count):
         width = int(width)
         height = int(height)
         lava_count = int(lava_count)
-        if 34 > width > 1 and 21 > height > 1 and 0 != lava_count < height * width:  # Säkerställer användaren skriver in rimliga nummer
+        if 34 > width > 1 and 21 > height > 1 and 0 != lava_count < height * width:
             reset_window()
             main(width, height, lava_count)
         elif width > 33: messagebox.showerror("Error", "The (1st) witdh you have enterd is\ntoo big, use a witdh smaller than 34")
