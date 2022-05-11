@@ -13,7 +13,6 @@ elements to seperate it from the classic minesweerper
 
 ## Requirements/Prerequisites
 
-***Vad krävs för att köra ditt program? Lista bara kraven.***
 
 - Python 3.7+
 
