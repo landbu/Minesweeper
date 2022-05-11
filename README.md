@@ -80,7 +80,7 @@ By starting the program the user will be presented with a menu. In the menu the 
 
 
 #### Removed
-- Removed the basic_print() function because I now longer thought it helpful in bug testing or any testing at all.
+- Removed the basic_print() function because I no longer thought it helpful in bug testing or any testing at all.
 
 
 ### Version 0.4.1
