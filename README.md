@@ -1,8 +1,8 @@
 # Minecraftsweeper
 
 ## Description 
-A simple minecrafty twist on the classic minesweerper with blocks to be mined and lava to be avoided. In later versions I hope to introduce further
-elements to seperate it from the classic minesweerper
+A simple minecrafty twist on the classic minesweeper with blocks to be mined and lava to be avoided. In later versions I hope to introduce further
+elements to separate it from the classic minesweeper
 
 
 ## Built with
@@ -18,7 +18,7 @@ elements to seperate it from the classic minesweerper
 
 ## Installation
 
-The program is tested and made for python 3+ (made in 3.10.2), to install python follow [this](https://www.python.org/downloads/) link. No further istalls are recuired to run the program 
+The program is tested and made for python 3+ (made in 3.10.2), to install python follow [this](https://www.python.org/downloads/) link. No further installs are required to run the program 
 
 ## Code conventions
 
@@ -26,10 +26,10 @@ pep-8
 
 ## How to play (Usage)
 
-By starting the program the user will be presented with a menu. In the menu the user cna specify information about the game he wants to play, height of the map, leangh and amount of lava on the map. After that the game consists of clicking on calculated tiles to uncover the map. If a lava tile is clicked the game is lost and if all but the lava tiles are cleared the game is win
+By starting the program the user will be presented with a menu. In the menu the user can specify information about the game he wants to play, height of the map, length and amount of lava on the map. After that the game consists of clicking on calculated tiles to uncover the map. If a lava tile is clicked the game is lost and if all but the lava tiles are cleared the game is win
 
 
-## Example (exempelkörning)
+## Example
 
 ![Mine-screenshot](https://user-images.githubusercontent.com/95740885/167784334-985e68b5-76bf-4f50-8bf0-761afcf702ba.JPG)
 
@@ -39,8 +39,8 @@ By starting the program the user will be presented with a menu. In the menu the 
 - [x] Publish a functional, but minimalistic, minesweeper copy
 - [ ] Add the missing minesweeper elements (mainly flags, but also perhaps highscore)
 - [ ] Use graphics to make it look like a minecraft mine
-- [ ] Add aditional content to the game, like special ores to mine and (the option make) bigger maps.
-- [ ] Defeat Gustav Brandeel in the best minesweeper contest
+- [ ] Add additional content to the game, like special ores to mine and (the option make) bigger maps.
+- [ ] Defeat Gustav Brandell in the best minesweeper contest
 
 
 
@@ -53,22 +53,22 @@ By starting the program the user will be presented with a menu. In the menu the 
 
 - Added "Tile" class
 - Added the map creator function to create a grided map of Tile objects and also randomly place lava (bombs in classical minesweeper).
-- Added simple main/menu to call map_creator with inputed args
+- Added simple main/menu to call map_creator with input args
 
 
 
 ### Version 0.2.0
 
 #### Added or changed
-- Adeed a function, calculate_nears(), that calculates and asigns each Tile object thier nearby, within a leangh of one on the map, Tile objects
-- Added a (later to be romved) function to more easly verify the succes of newly added functions by printing the entire map in a desired manner, which possition it has, how many nearby lava (when that is added) ect.
+- Adeed a function, calculate_nears(), that calculates and assigns each Tile object their nearby, within a length of one on the map, Tile objects
+- Added a (later to be removed) function to more easily verify the success of newly added functions by printing the entire map in a desired manner, which position it has, how many nearby lava (when that is added) ect.
 
 
 ### Version 0.3.0
 
 #### Added or changed
-- Added a function, calcucalte_nearby_lava(), to, based on the previsously calculated nearby objects, asign the object with the amount of objects in its "near" atribute with the lava_bool atribute set to True
-- Changed the Tile class to include a button atribute so that each tile -object will get its own ascociated button
+- Added a function, calcucalte_nearby_lava(), to, based on the previously calculated nearby objects, assign the object with the amount of objects in its "near" attribute with the lava_bool attribute set to True
+- Changed the Tile class to include a button attribute so that each tile -object will get its own associated button
 - Added the clicked() function to define what happens when a button is clicked
 - Added a tkinter window that displays each button
 
@@ -76,7 +76,7 @@ By starting the program the user will be presented with a menu. In the menu the 
 ### Version 0.4.0
 #### Added or changed
 - Added the big_clear() function to do the multi-clears one should be familiar with from classical minesweeper
-- Added the calculate_prime_nears to calculate which of each objects nears are not near by diagonals. This will later be used to improve upon the big clears. The prime_nears also became an atribute of each object
+- Added the calculate_prime_nears to calculate which of each objects nears are not near by diagonals. This will later be used to improve upon the big clears. The prime_nears also became an attribute of each object
 
 
 #### Removed
@@ -89,13 +89,13 @@ By starting the program the user will be presented with a menu. In the menu the 
 - Fixed a bug with big_clear
 - Added some long-needed comments
 #### Removed
-- Removed all of the prime_nears stuff, simple decided I didn't feel the concept neccisary 
+- Removed all of the prime_nears stuff, simple decided I didn't feel the concept necessary 
 
 
 ### Version 0.5.0
 
 #### Added or changed
-- Added a game_over() function so that the player actually looses when clicking on a lava infested tile/block
+- Added a game_over() function so that the player actually loses when clicking on a lava infested tile/block
 - Added a proper, tkinter, menu and a function that make sures the entered height and width are valid inputs
 - Cleaned up the code a bit
 
